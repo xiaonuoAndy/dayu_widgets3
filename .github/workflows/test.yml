@@ -151,6 +151,10 @@ jobs:
 
   maya-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        maya-version: ['2022', '2023', '2024', '2025']
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -178,6 +182,8 @@ jobs:
         pip install nox
 
     - name: Run Maya tests
+      env:
+        MAYA_VERSION: ${{ matrix.maya-version }}
       run: |
         nox -s maya-test
 

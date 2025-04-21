@@ -18,6 +18,10 @@ def maya_test(session: nox.Session) -> None:
     in_ci = os.environ.get("CI") is not None
     print(f"Running in CI: {in_ci}")
 
+    # Get Maya version from environment variable or default to 2022
+    maya_version = os.environ.get("MAYA_VERSION", "2022")
+    print(f"Using Maya version: {maya_version}")
+
     # Check if Docker is available
     try:
         session.run("docker", "--version", external=True)
@@ -64,10 +68,10 @@ def maya_test(session: nox.Session) -> None:
             # Pull the Docker image
             try:
                 session.run(
-                    "docker", "pull", "mottosso/maya:2022",
+                    "docker", "pull", f"mottosso/maya:{maya_version}",
                     external=True
                 )
-                print("Successfully pulled mottosso/maya:2022 image")
+                print(f"Successfully pulled mottosso/maya:{maya_version} image")
             except Exception as e:
                 print(f"Warning: Could not pull Docker image: {e}")
                 print("Continuing with existing image if available...")
@@ -101,7 +105,7 @@ except Exception as e:
                 "docker", "run", "--rm",
                 "-v", f"{docker_path}:/dayu_widgets",
                 "-w", "/dayu_widgets",
-                "mottosso/maya:2022",
+                f"mottosso/maya:{maya_version}",
                 "mayapy", "maya_test_script.py",
                 external=True
             )
