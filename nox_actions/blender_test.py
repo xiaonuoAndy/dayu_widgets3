@@ -14,17 +14,26 @@ def blender_test(session: nox.Session) -> None:
     root_dir = Path(__file__).parent.parent.absolute()
 
     # Install dependencies
-    session.install("pytest>=7.0.0", "pytest-cov>=4.1.0")
+    session.install("pytest>=7.0.0", "pytest-cov>=4.1.0", "qtpy>=2.3.1")
 
-    # Install the package with PySide6 (Blender 3.x+ uses PySide6)
-    session.install("-e", ".[pyside6]")
-
-    # Set environment variables
+    # Set default environment variables
     env = {
-        "QT_API": "pyside6",
         "PYTHONPATH": str(root_dir),
         "CI": "1"
     }
+
+    # Install PySide6 directly instead of using extras
+    try:
+        session.install("PySide6>=6.4.2")
+        env["QT_API"] = "pyside6"
+    except Exception as e:
+        print(f"Warning: Could not install PySide6: {e}")
+        # Fall back to PySide2 if PySide6 installation fails
+        session.install("PySide2>=5.15.2.1")
+        env["QT_API"] = "pyside2"
+
+    # Install the package in development mode
+    session.install("-e", ".")
 
     # For CI, we'll just run a simple test to verify the imports work
     # This avoids the need for Blender
