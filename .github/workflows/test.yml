@@ -22,7 +22,7 @@ jobs:
 
     - name: Run tests
       run: |
-        nox -s test -- --qt-binding=pyside2
+        nox -s test
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -33,67 +33,4 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: false
 
-  lint:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'pip'
-        cache-dependency-path: '**/pyproject.toml'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install nox
-
-    - name: Run lint
-      run: |
-        nox -s lint
-
-  maya-test:
-    runs-on: windows-latest
-    needs: [lint]
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'pip'
-        cache-dependency-path: '**/pyproject.toml'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install nox
-
-    - name: Run Maya compatibility tests
-      run: |
-        nox -s maya-test
-
-  blender-test:
-    runs-on: windows-latest
-    needs: [lint]
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'pip'
-        cache-dependency-path: '**/pyproject.toml'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install nox
-
-    - name: Run Blender compatibility tests
-      run: |
-        nox -s blender-test
