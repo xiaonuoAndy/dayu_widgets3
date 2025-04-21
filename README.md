@@ -88,6 +88,39 @@ if __name__ == "__main__":
 ```
 
 
+## 使用 Docker 进行 Maya 和 Blender 测试
+
+本项目支持使用 Docker 容器来测试组件库在 Maya 和 Blender 中的兼容性。这种方法不需要在本地安装 Maya 或 Blender，非常适合开发和测试。
+
+### 前提条件
+
+- 安装 [Docker](https://www.docker.com/products/docker-desktop/)
+- 确保 Docker 服务正在运行
+
+### Maya 测试
+
+使用 [mottosso/maya](https://hub.docker.com/r/mottosso/maya) Docker 镜像进行测试：
+
+```shell
+# 拉取 Maya Docker 镜像
+docker pull mottosso/maya:2022
+
+# 运行 Maya 测试
+nox -s maya-test
+```
+
+### Blender 测试
+
+使用 [linuxserver/blender](https://hub.docker.com/r/linuxserver/blender) Docker 镜像进行测试：
+
+```shell
+# 拉取 Blender Docker 镜像
+docker pull linuxserver/blender
+
+# 运行 Blender 测试
+nox -s blender-test
+```
+
 ## 如何贡献代码
 
 ### 安装poetry
