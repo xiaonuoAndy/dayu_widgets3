@@ -1,4 +1,4 @@
-![logo](_media/logo.svg)
+![logo](../_media/logo.svg)
 
 # DaYu Widgets <small>0.0.1</small>
 
@@ -9,4 +9,4 @@
 * Light & Dark themes
 
 [GitHub](https://github.com/phenom-films/dayu_widgets)
-[Get Started](/README.md)
+[Get Started](README.md)
