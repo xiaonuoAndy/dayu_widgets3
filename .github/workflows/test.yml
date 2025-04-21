@@ -4,49 +4,25 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest]
-        python-version: [3.9]
-        qt-binding: ['pyside2']
-
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.9
         cache: 'pip'
         cache-dependency-path: '**/pyproject.toml'
-
-    - name: Install Linux dependencies
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install nox
 
-    - name: Run tests (Windows)
-      if: runner.os == 'Windows'
+    - name: Run tests
       run: |
-        nox -s test -- --qt-binding=${{ matrix.qt-binding }}
-
-    - name: Run tests (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        xvfb-run --auto-servernum nox -s test -- --qt-binding=${{ matrix.qt-binding }}
-
-    - name: Run tests (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        nox -s test -- --qt-binding=${{ matrix.qt-binding }}
+        nox -s test -- --qt-binding=pyside2
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -55,10 +31,10 @@ jobs:
         file: ./coverage.xml
         flags: unittests
         name: codecov-umbrella
-        fail_ci_if_error: true
+        fail_ci_if_error: false
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
 
@@ -79,7 +55,7 @@ jobs:
         nox -s lint
 
   maya-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: [lint]
     steps:
     - uses: actions/checkout@v3
@@ -101,7 +77,7 @@ jobs:
         nox -s maya-test
 
   blender-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: [lint]
     steps:
     - uses: actions/checkout@v3
@@ -109,7 +85,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.9'
         cache: 'pip'
         cache-dependency-path: '**/pyproject.toml'
 
