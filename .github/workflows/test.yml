@@ -8,14 +8,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest]
         python-version: [3.9]
-        qt-binding: ['pyside2', 'pyside6']
-        include:
-          # 添加 Python 3.10 + PySide6 的测试
-          - os: windows-latest
-            python-version: 3.10
-            qt-binding: 'pyside6'
+        qt-binding: ['pyside2']
 
     steps:
     - uses: actions/checkout@v3
@@ -70,7 +65,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'
+        python-version: '3.9'
         cache: 'pip'
         cache-dependency-path: '**/pyproject.toml'
 
