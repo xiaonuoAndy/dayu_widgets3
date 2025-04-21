@@ -8,12 +8,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        python-version: [3.9]
-        qt-binding: ['pyside2']
         include:
+          # Windows with PySide2
+          - os: windows-latest
+            python-version: 3.9
+            qt-binding: 'pyside2'
+          # Windows with PySide6
           - os: windows-latest
             python-version: 3.10
+            qt-binding: 'pyside6'
+          # Ubuntu with PySide6 only (PySide2 is not supported on Ubuntu with Python 3.9+)
+          - os: ubuntu-latest
+            python-version: 3.9
             qt-binding: 'pyside6'
 
     steps:
