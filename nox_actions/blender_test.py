@@ -67,17 +67,48 @@ def blender_test(session: nox.Session) -> None:
         # Run the Blender tests using Docker
         try:
             print("Running Blender tests with Docker...")
-            session.run(
-                "docker", "pull", "linuxserver/blender",
-                external=True
-            )
+            # Pull the Docker image
+            try:
+                session.run(
+                    "docker", "pull", "linuxserver/blender",
+                    external=True
+                )
+                print("Successfully pulled linuxserver/blender image")
+            except Exception as e:
+                print(f"Warning: Could not pull Docker image: {e}")
+                print("Continuing with existing image if available...")
+
+            # Convert Windows path to Docker-compatible path if needed
+            docker_path = str(root_dir).replace('\\', '/')
+            if os.name == 'nt' and ':' in docker_path:  # Windows path with drive letter
+                drive, path = docker_path.split(':', 1)
+                docker_path = f"//{drive.lower()}{path}"
+                print(f"Converted Windows path to Docker path: {docker_path}")
+
+            # Create a simple test script
+            test_script = """import sys
+import os
+
+try:
+    import dayu_widgets
+    print('Blender Docker test passed!')
+except Exception as e:
+    print(f'Error importing dayu_widgets: {e}')
+    sys.exit(1)
+"""
+            test_script_path = os.path.join(root_dir, "blender_test_script.py")
+            with open(test_script_path, "w") as f:
+                f.write(test_script)
+            print(f"Created test script at {test_script_path}")
+
+            # Run the Docker container
+            print("Running Docker container...")
             session.run(
                 "docker", "run", "--rm",
-                "-v", f"{root_dir}:/dayu_widgets",
+                "-v", f"{docker_path}:/dayu_widgets",
                 "-w", "/dayu_widgets",
                 "linuxserver/blender",
-                "blender", "--background", "--python-expr", "import sys; import os; import dayu_widgets; print('Blender Docker test passed!');",
-                env=env,
+                "blender", "--background", "--python", "blender_test_script.py",
                 external=True
             )
             print("Blender Docker test completed successfully!")

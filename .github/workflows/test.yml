@@ -101,6 +101,11 @@ jobs:
     - name: Set up Docker
       uses: docker/setup-buildx-action@v2
 
+    - name: Check Docker
+      run: |
+        docker --version
+        docker info
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -127,6 +132,11 @@ jobs:
 
     - name: Set up Docker
       uses: docker/setup-buildx-action@v2
+
+    - name: Check Docker
+      run: |
+        docker --version
+        docker info
 
     - name: Install dependencies
       run: |

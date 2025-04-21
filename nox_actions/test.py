@@ -8,7 +8,7 @@ import nox
 
 
 @nox.session
-def test(session: nox.Session) -> None:
+def test(session: nox.Session, qt_binding=None) -> None:
     """Run tests with specific Qt binding and Python version."""
     # Print debug information
     print(f"Python version: {sys.version}")
@@ -19,24 +19,41 @@ def test(session: nox.Session) -> None:
     root_dir = Path(__file__).parent.parent.absolute()
     print(f"Project root directory: {root_dir}")
 
+    # Print command line arguments
+    print(f"Qt binding from command line: {qt_binding}")
+
     try:
         # Install minimal dependencies
         print("Installing minimal dependencies...")
         session.install("pytest>=7.0.0", "pytest-cov>=4.1.0", "qtpy>=2.3.1")
 
-        # Try to install PySide2 (for basic testing)
-        try:
-            print("Installing PySide2...")
-            session.install("PySide2>=5.15.2.1")
-            qt_binding = "pyside2"
-        except Exception as e:
-            print(f"Error installing PySide2: {e}")
-            print("Trying to install PySide6 instead...")
+        # Determine which Qt binding to use
+        if qt_binding is None or qt_binding not in ["pyside2", "pyside6"]:
+            # Try to install PySide2 (for basic testing)
             try:
-                session.install("PySide6>=6.4.2")
-                qt_binding = "pyside6"
-            except Exception as e2:
-                print(f"Error installing PySide6: {e2}")
+                print("Installing PySide2...")
+                session.install("PySide2>=5.15.2.1")
+                qt_binding = "pyside2"
+            except Exception as e:
+                print(f"Error installing PySide2: {e}")
+                print("Trying to install PySide6 instead...")
+                try:
+                    session.install("PySide6>=6.4.2")
+                    qt_binding = "pyside6"
+                except Exception as e2:
+                    print(f"Error installing PySide6: {e2}")
+                    print("Continuing without Qt bindings...")
+                    qt_binding = "none"
+        else:
+            # Use the specified Qt binding
+            print(f"Using specified Qt binding: {qt_binding}")
+            try:
+                if qt_binding == "pyside2":
+                    session.install("PySide2>=5.15.2.1")
+                else:  # pyside6
+                    session.install("PySide6>=6.4.2")
+            except Exception as e:
+                print(f"Error installing {qt_binding}: {e}")
                 print("Continuing without Qt bindings...")
                 qt_binding = "none"
 
