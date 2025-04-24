@@ -15,6 +15,7 @@ from nox_actions.test import test
 from nox_actions.lint import lint, lint_fix
 from nox_actions.maya_test import maya_test
 from nox_actions.blender_test import blender_test
+from nox_actions.uv_test import uv_test
 
 # Register sessions
 nox.session(test, name="test")
@@ -22,3 +23,4 @@ nox.session(lint, name="lint")
 nox.session(lint_fix, name="lint-fix")
 nox.session(maya_test, name="maya-test")
 nox.session(blender_test, name="blender-test")
+nox.session(uv_test, name="uv-test")

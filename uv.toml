@@ -1,0 +1,30 @@
+[uv]
+# Use the latest version of pip
+pip-version = "latest"
+
+# Use the latest version of setuptools
+setuptools-version = "latest"
+
+# Use the latest version of wheel
+wheel-version = "latest"
+
+# Exclude certain directories from being considered as Python packages
+exclude = [
+    "tests",
+    "docs",
+    "examples",
+    "screenshots",
+    ".github",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+]
+
+[uv.install]
+# Install development dependencies by default
+dev = true
+
+[uv.venv]
+# Use a consistent location for virtual environments
+venv-dir = ".venv"

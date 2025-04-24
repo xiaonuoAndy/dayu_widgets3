@@ -1,6 +1,10 @@
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0", "hatchling>=1.18.0"]
 build-backend = "poetry.core.masonry.api"
+
+# Alternative build backend for uv
+# Uncomment the following line and comment out the above build-backend line to use hatchling
+# build-backend = "hatchling.build"
 
 [tool.poetry]
 name = "dayu_widgets"

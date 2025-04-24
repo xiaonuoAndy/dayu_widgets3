@@ -123,33 +123,80 @@ nox -s blender-test
 
 ## 如何贡献代码
 
-### 安装poetry
-``shell
-pip install poetry
-``
+### 使用 Poetry 安装（推荐）
 
-### 安装依赖
+#### 安装 Poetry
+```shell
+pip install poetry
+```
+
+#### 安装依赖
 ```shell
 poetry install
 ```
-注意，依赖里并未强制要求安装任何 Qt 的python 绑定库，可根据自己的需要，选择手动安装 PySide2、PySide6、PyQt4、PyQt5。
 
-### 运行单元测试
+#### 运行单元测试
 ```shell
 poetry run pytest
 ```
 
-### 运行 black检查
+#### 运行 black 检查
 ```shell
-poetry run black dayu_widgets3
+poetry run black dayu_widgets
 ```
 
-### 运行isort
+#### 运行 isort
 ```shell
-poetry run isort dayu_widgets3
+poetry run isort dayu_widgets
 ```
 
-### 提交代码
+#### 提交代码
 ```shell
 poetry run cz commit
 ```
+
+### 使用 uv 安装（更快的替代方案）
+
+[uv](https://github.com/astral-sh/uv) 是一个快速的 Python 包管理器和解释器，用 Rust 编写，可以显著提高依赖安装速度。
+
+#### 安装 uv
+```shell
+# 使用官方安装脚本
+curl -sSf https://astral.sh/uv/install.sh | sh
+
+# 或者使用 pip
+pip install uv
+```
+
+#### 创建虚拟环境并安装依赖
+```shell
+# 创建虚拟环境并安装所有依赖（包括开发依赖）
+uv venv
+uv pip install -e .
+```
+
+#### 安装特定的 Qt 绑定
+```shell
+# 安装 PySide2
+uv pip install PySide2>=5.15.2.1
+
+# 或安装 PySide6
+uv pip install PySide6>=6.4.2
+```
+
+#### 运行单元测试
+```shell
+uv run pytest
+```
+
+#### 运行 black 检查
+```shell
+uv run black dayu_widgets
+```
+
+#### 运行 isort
+```shell
+uv run isort dayu_widgets
+```
+
+注意，依赖里并未强制要求安装任何 Qt 的 Python 绑定库，可根据自己的需要，选择手动安装 PySide2、PySide6、PyQt4、PyQt5。
