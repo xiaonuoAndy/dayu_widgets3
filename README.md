@@ -24,8 +24,8 @@
 
 ## 文档
 
-* [中文文档](https://xiaonuoandy.github.io/dayu_widgets3/#/zh-cn/)
-* [English Documentation](https://xiaonuoandy.github.io/dayu_widgets3/#/en-us/)
+* [中文文档](https://zhuoxyang.github.io/dayu_widgets3/#/zh-cn/)
+* [English Documentation](https://zhuoxyang.github.io/dayu_widgets3/#/en-us/)
 
 ## 扩展组件
 
@@ -76,7 +76,7 @@ uv pip install "dayu_widgets3[pyside6]"
 
 ```shell
 # 克隆仓库
-git clone https://github.com/xiaonuoAndy/dayu_widgets3.git
+git clone https://github.com/zhuoxyang/dayu_widgets3.git
 cd dayu_widgets3
 
 # 使用 uv 安装开发版本
